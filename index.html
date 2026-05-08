@@ -152,8 +152,38 @@
     color: rgba(255,255,255,0.55);
     font-size: 15px;
     max-width: 460px;
-    margin: 0 auto 32px;
+    margin: 0 auto 18px;
     line-height: 1.7;
+  }
+
+  .hero-note {
+    position: relative;
+    margin: 0 auto 32px;
+    width: 100%;
+    max-width: 580px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.1);
+    padding: 14px 18px;
+  }
+
+  .hero-note span {
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 20px;
+    color: #f8f6ec;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-family: 'DM Sans', 'Courier New', monospace;
+    text-shadow: 0 0 8px rgba(248,246,236,0.65);
+    animation: hero-marquee 14s linear infinite;
+  }
+
+  @keyframes hero-marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
   }
 
   .search-bar {
@@ -276,15 +306,40 @@
     align-items: center;
     justify-content: center;
     position: relative;
+    overflow: hidden;
     font-size: 40px;
   }
 
-  .cover-1 { background: linear-gradient(135deg, #2d1b69 0%, #6e3cb5 100%); }
-  .cover-2 { background: linear-gradient(135deg, #0d3b28 0%, #1d8a5c 100%); }
-  .cover-3 { background: linear-gradient(135deg, #7a1c1c 0%, #c84040 100%); }
-  .cover-4 { background: linear-gradient(135deg, #1a3a5c 0%, #2e7ec4 100%); }
-  .cover-5 { background: linear-gradient(135deg, #5a3a00 0%, #b8720a 100%); }
-  .cover-6 { background: linear-gradient(135deg, #2b3b2a 0%, #4a7a45 100%); }
+  .book-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .mini-cover img,
+  .reader-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .reader-cover {
+    width: 80px; height: 104px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .cover-1 { background: linear-gradient(135deg, #d9d7fb 0%, #b3a9f7 100%); }
+  .cover-2 { background: linear-gradient(135deg, #dff7e6 0%, #b7e7c9 100%); }
+  .cover-3 { background: linear-gradient(135deg, #ffd8d1 0%, #ffb3a8 100%); }
+  .cover-4 { background: linear-gradient(135deg, #d7ecff 0%, #a6d5ff 100%); }
+  .cover-5 { background: linear-gradient(135deg, #fff0d1 0%, #ffe0a8 100%); }
+  .cover-6 { background: linear-gradient(135deg, #e5f4df 0%, #b9dfb8 100%); }
 
   .book-type-badge {
     position: absolute;
@@ -533,6 +588,29 @@
     color: var(--ink);
     outline: none;
     transition: border-color 0.2s;
+  }
+
+  .cover-upload-preview {
+    margin-top: 10px;
+    width: 100%;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.9);
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .cover-upload-preview img {
+    width: auto;
+    max-width: 100%;
+    max-height: 120px;
+    display: block;
   }
 
   .form-input:focus, .form-select:focus, .form-textarea:focus {
@@ -947,6 +1025,7 @@
     <p class="hero-eyebrow">Perpustakaan Digital Terpercaya</p>
     <h1>Temukan <em>Ilmu</em><br>Tanpa Batas</h1>
     <p class="hero-sub">Ribuan koleksi buku, jurnal, dan artikel akademik tersedia untuk Anda jelajahi kapan saja dan di mana saja.</p>
+    <div class="hero-note"><span>PERPUSTAKA DIGITAL SMKN RAKIT KULIM 2026</span></div>
     <div class="search-bar">
       <input type="text" id="search-input" placeholder="Cari judul, penulis, atau topik..." oninput="filterBooks()">
       <button onclick="filterBooks()"><i class="ti ti-search" aria-hidden="true"></i> Cari</button>
@@ -1020,9 +1099,18 @@
             <h2>Selamat Datang, Admin!</h2>
             <p>Pantau dan kelola koleksi perpustakaan digital Anda</p>
           </div>
-          <button class="btn-primary" onclick="showAdminSection('upload', document.querySelectorAll('.sidebar-item')[1])">
-            <i class="ti ti-plus" aria-hidden="true"></i> Upload Baru
-          </button>
+          <div style="display:flex;gap:10px">
+            <button class="btn-primary" onclick="exportData()" style="background:#2e7ec4;border:none">
+              <i class="ti ti-download" aria-hidden="true"></i> Backup Data
+            </button>
+            <button class="btn-primary" onclick="document.getElementById('import-file').click()">
+              <i class="ti ti-upload" aria-hidden="true"></i> Restore Data
+            </button>
+            <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+            <button class="btn-primary" onclick="showAdminSection('upload', document.querySelectorAll('.sidebar-item')[1])">
+              <i class="ti ti-plus" aria-hidden="true"></i> Upload Baru
+            </button>
+          </div>
         </div>
 
         <div class="admin-stats">
@@ -1124,6 +1212,11 @@
               <div class="url-preview" id="url-preview">https://... (preview link)</div>
             </div>
             <div class="form-group full">
+              <label class="form-label">Upload Cover</label>
+              <input type="file" class="form-input" id="f-cover" accept="image/*" onchange="previewCover(event)">
+              <div class="cover-upload-preview" id="cover-preview">Belum ada cover</div>
+            </div>
+            <div class="form-group full">
               <label class="form-label">Deskripsi Singkat</label>
               <textarea class="form-textarea" id="f-desc" placeholder="Tuliskan sinopsis atau deskripsi singkat..."></textarea>
             </div>
@@ -1142,7 +1235,7 @@
 
           <div class="form-actions">
             <button class="btn-secondary" onclick="resetForm()">Reset</button>
-            <button class="btn-primary" onclick="submitUpload()">
+            <button class="btn-primary" id="submit-btn" onclick="submitUpload()">
               <i class="ti ti-upload" aria-hidden="true"></i> Upload Sekarang
             </button>
           </div>
@@ -1262,27 +1355,132 @@ const COVERS = {
 let books = [
   {id:1, title:'Teknologi, Informasi Komunikasi dan Pendidikan', author:'Dr. Shoffan Shoffa, S.Pd., M.Pd.', cat:'Teknologi', type:'Buku', url:'https://fliphtml5.com/aqmqo/kago/Teknologi%2C_Informasi%2C_Komunikasi%2C_dan_Pendidikan/', desc:'Panduan lengkap belajar Python dari dasar hingga tingkat lanjut untuk pengembang modern.', cover:'cover-4', status:'aktif'},
   {id:2, title:'Teknologi Masa Depan', author:'charles Piddock', cat:'Teknologi', type:'Buku', url:'https://fliphtml5.com/mynfe/wgwz/National_Geographic-_Teknologi_Masa_Depan/', cover:'cover-4', status:'aktif'},
-  {id:3, title:'Teknologi Komunikasi Prespektif Ilmu Komunikasi', author:'Ine Fitrianingsih', cat:'Teknologi', type:'Buku', url:'https://fliphtml5.com/maeeg/mrcw/Teknologi_Komunikasi_Prespektif_Ilmu_Komunikasi/', cover:'cover-4', status:'aktif'},
-  {id:4, title:'Digital Camera world', author:'Niall.Hampton', cat:'Teknologi', type:'Buku', url:'https://fliphtml5.com/vbjos/jpcf/Digital_Camera_World_05.2026/', cover:'cover-4', status:'aktif'},
-  {id:5, title:'Pendidikan Karakter Berbasis Sastra', author:'Rohima M. Noor', cat:'Sastra', type:'Buku', url:'https://fliphtml5.com/ryuru/cwuq/Pendidikan_Karakter_Berbasis_Sastra/', desc:'Kumpulan karya sastra Melayu klasik dari berbagai nusantara yang kaya akan nilai budaya.', cover:'cover-2', status:'aktif'},
-  {id:6, title:'Menyambut Plot Twist Kehidupan', author:'Hadila', cat:'Sastra', type:'Buku', url:'https://fliphtml5.com/twezg/zvcy/Hadila_Edisi_227%2C_Mei_2026_-_Menyambut_Plot_Twist_Kehidupan/', desc:'Dibaca Dulu Baru tau Plot Twist Kehidupan.', cover:'cover-2', status:'aktif'},
-  {id:7, title:'Penemu Terhebat Ilmuwan Muslim', author:'Cahya Sri Fatin', cat:'Sastra', type:'Buku', url:'https://fliphtml5.com/isbsi/xohe/Ensiklopedia_Penemuan_Terhebat_Ilmuwan_Muslim/', desc:'Kumpulan penemuan terhebat ilmuan muslim.', cover:'cover-2', status:'aktif'},
-  {id:8, title:'Sain, Saintisme dan Agama', author:'Goenawan Mohamad, A.S.Laksana', cat:'Sains', type:'Jurnal', url:'https://fliphtml5.com/fnzon/ceoi/Buku-Digital-Sains-Saintisme-dan-Agama/', desc:'Jurnal ilmiah terbaru tentang perkembangan biologi sel dan genetika molekuler.', cover:'cover-3', status:'aktif'},
-  {id:9, title:'Alquran Dan Sains', author:'Ahmad Sarawat, Lc.,MA', cat:'Sains', type:'Jurnal', url:'https://fliphtml5.com/jhicc/umip/Al-Quran_dan_Sains/', desc:'Jurnal ilmiah terbaru tentang perkembangan al-Quran dan sains.', cover:'cover-3', status:'aktif'},
-  {id:10, title:'Wahyu Sebagai Sumber Dalam Bidang Sains', author:'Luqman, Aisyah, Hanis', cat:'Sains', type:'Jurnal', url:'https://fliphtml5.com/lnjfy/cjet/WAHYU_SEBAGAI_SUMBER_SAINS_TEKNOLOGI_LUQMAN_CAH_HANIS/', desc:'Jurnal ilmiah terbaru tentang perkembangan al-Quran dan sains.', cover:'cover-3', status:'aktif'},
-  {id:11, title:'Proses Hujan menurut Perspektif Islam dan Sains', author:'Universitas Malaya', cat:'Sains', type:'Jurnal', url:'https://fliphtml5.com/vunhz/qpjv/Proses_Hujan_menurut_Perspektif_Islam_dan_Sains/', desc:'Jurnal ilmiah terbaru tentang perkembangan al-Quran dan sains.', cover:'cover-3', status:'aktif'},
-  {id:12, title:'Sejarah Kerajaan Sriwijaya', author:'Prof. Hendra', cat:'Sejarah', type:'Artikel', url:'https://wikipedia.org', desc:'Eksplorasi mendalam tentang kejayaan Kerajaan Sriwijaya sebagai pusat maritim dunia.', cover:'cover-5', status:'aktif'},
-  {id:13, title:'Sejarah Islam Nusantara', author:'Michael Laffan', cat:'Sejarah', type:'Artikel', url:'https://fliphtml5.com/rqdug/tqak/Buku_Sejarah_Islam_Di_Nusantara_-_Karangan_Michael_Laffan/', desc:'Eksplorasi mendalam tentang Sejarah Islam di Nusantara.', cover:'cover-5', status:'aktif'},
-  {id:14, title:'Ekonomi Politik Internasional dalam Hubungan Internasional', author:'Hasna Wijayanti, S.IP., M.A', cat:'Ekonomi', type:'Makalah', url:'https://fliphtml5.com/onblf/xeot/Ekonomi_Politik_Internasional_dalam_Hubungan_Internasional/', desc:'Analisis perkembangan ekonomi digital di Indonesia dan dampaknya terhadap pertumbuhan nasional.', cover:'cover-6', status:'aktif'},
-  {id:15, title:'Sistem Ekonomi Feudalisme Di China', author:'Cikgu Dayang Khursiah', cat:'Ekonomi', type:'Makalah', url:'https://fliphtml5.com/xzylz/rcab/Sejarah_Dunia_Tema_3_-_Sistem_Ekonomi_Feudalisme_Di_China/', desc:'Analisis perkembangan ekonomi digital di Indonesia dan dampaknya terhadap pertumbuhan nasional.', cover:'cover-6', status:'aktif'},
-  {id:16, title:'Sistem Ekonomi Digital di Indonesia', author:'Dr. DANRIVANTO B.', cat:'Ekonomi', type:'Makalah', url:'https://fliphtml5.com/iiprk/kmkx/Hukum_EKonomi_Digital_di_Indonesia_by_Dr._DANRIVANTO_B_%28z-lib.org%29/', desc:'Analisis perkembangan ekonomi digital di Indonesia dan dampaknya terhadap pertumbuhan nasional.', cover:'cover-6', status:'aktif'},
-  {id:17, title:'Internet of Things dalam Ekonomi dan Bisnis', author:'Dr.Agus Wibowo', cat:'Ekonomi', type:'Makalah', url:'https://fliphtml5.com/uookw/wxli/Internet_Of_Things_dalam_ekonomi_dan_bisnis/', desc:'Analisis perkembangan ekonomi digital di Indonesia dan dampaknya terhadap pertumbuhan nasional.', cover:'cover-6', status:'aktif'},
+  {id:3, title:'AI dan Modernisasi Peradilan', author:'Dr. Ir. Agus Wibowo', cat:'Teknologi', type:'Buku', url:'https://fliphtml5.com/gakmh/zqwe/AI_%28Artificial_Intelligence%29_dan_Modernisasi_Peradilan/', cover:'cover-4', status:'aktif'},
+  {id:4, title:'Teknologi Komunikasi Prespektif Ilmu Komunikasi', author:'Ine Fitrianingsih', cat:'Teknologi', type:'Buku', url:'https://fliphtml5.com/maeeg/mrcw/Teknologi_Komunikasi_Prespektif_Ilmu_Komunikasi/', cover:'cover-4', status:'aktif'},
+  {id:5, title:'Digital Camera world', author:'Niall.Hampton', cat:'Teknologi', type:'Buku', url:'https://fliphtml5.com/vbjos/jpcf/Digital_Camera_World_05.2026/', cover:'cover-4', status:'aktif'},
+  {id:6, title:'Dilan Dia Adalah Dilanku Tahun 1990', author:'Pidi Baiq', cat:'Teknologi', type:'Buku', url:'https://fliphtml5.com/cwdun/yulx/Dilan_I_%3A_Dia_Adalah_Dilanku_Tahun_1990/', cover:'cover-4', status:'aktif'},
+  {id:7, title:'Dilan bagian Kedua Dia Adalah Dilanku Tahun 1990', author:'Pidi Baiq', cat:'Teknologi', type:'Buku', url:'https://fliphtml5.com/kwurb/jkcn/Dilan_1991/', cover:'cover-4', status:'aktif'},
+  {id:8, title:'Milea Suara Dari Dilan', author:'Pidi Baiq', cat:'Teknologi', type:'Buku', url:'https://fliphtml5.com/xaoqo/yboq/Pidi_Baiq_-_Milea_%28suara_dari_dilan%29/', cover:'cover-4', status:'aktif'},
+  {id:9, title:'Pendidikan Karakter Berbasis Sastra', author:'Rohima M. Noor', cat:'Sastra', type:'Buku', url:'https://fliphtml5.com/ryuru/cwuq/Pendidikan_Karakter_Berbasis_Sastra/', desc:'Kumpulan karya sastra Melayu klasik dari berbagai nusantara yang kaya akan nilai budaya.', cover:'cover-2', status:'aktif'},
+  {id:10, title:'Menyambut Plot Twist Kehidupan', author:'Hadila', cat:'Sastra', type:'Buku', url:'https://fliphtml5.com/twezg/zvcy/Hadila_Edisi_227%2C_Mei_2026_-_Menyambut_Plot_Twist_Kehidupan/', desc:'Dibaca Dulu Baru tau Plot Twist Kehidupan.', cover:'cover-2', status:'aktif'},
+  {id:11, title:'Penemu Terhebat Ilmuwan Muslim', author:'Cahya Sri Fatin', cat:'Sastra', type:'Buku', url:'https://fliphtml5.com/isbsi/xohe/Ensiklopedia_Penemuan_Terhebat_Ilmuwan_Muslim/', desc:'Kumpulan penemuan terhebat ilmuan muslim.', cover:'cover-2', status:'aktif'},
+  {id:12, title:'Sain, Saintisme dan Agama', author:'Goenawan Mohamad, A.S.Laksana', cat:'Sains', type:'Jurnal', url:'https://fliphtml5.com/fnzon/ceoi/Buku-Digital-Sains-Saintisme-dan-Agama/', desc:'Jurnal ilmiah terbaru tentang perkembangan biologi sel dan genetika molekuler.', cover:'cover-3', status:'aktif'},
+  {id:13, title:'Alquran Dan Sains', author:'Ahmad Sarawat, Lc.,MA', cat:'Sains', type:'Jurnal', url:'https://fliphtml5.com/jhicc/umip/Al-Quran_dan_Sains/', desc:'Jurnal ilmiah terbaru tentang perkembangan al-Quran dan sains.', cover:'cover-3', status:'aktif'},
+  {id:14, title:'Wahyu Sebagai Sumber Dalam Bidang Sains', author:'Luqman, Aisyah, Hanis', cat:'Sains', type:'Jurnal', url:'https://fliphtml5.com/lnjfy/cjet/WAHYU_SEBAGAI_SUMBER_SAINS_TEKNOLOGI_LUQMAN_CAH_HANIS/', desc:'Jurnal ilmiah terbaru tentang perkembangan al-Quran dan sains.', cover:'cover-3', status:'aktif'},
+  {id:15, title:'Proses Hujan menurut Perspektif Islam dan Sains', author:'Universitas Malaya', cat:'Sains', type:'Jurnal', url:'https://fliphtml5.com/vunhz/qpjv/Proses_Hujan_menurut_Perspektif_Islam_dan_Sains/', desc:'Jurnal ilmiah terbaru tentang perkembangan al-Quran dan sains.', cover:'cover-3', status:'aktif'},
+  {id:16, title:'Menyelamatkan Hutan', author:'National Geographic indonesia', cat:'Sejarah', type:'Artikel', url:'https://fliphtml5.com/PUSTAKASPENP4/twpn/Majalah_National_Geographic_Indonesia_-_Menyelamatkan_Hutan/', desc:'Eksplorasi mendalam tentang kejayaan Kerajaan Sriwijaya sebagai pusat maritim dunia.', cover:'cover-5', status:'aktif'},
+  {id:17, title:'Sejarah Islam Nusantara', author:'Michael Laffan', cat:'Sejarah', type:'Artikel', url:'https://fliphtml5.com/rqdug/tqak/Buku_Sejarah_Islam_Di_Nusantara_-_Karangan_Michael_Laffan/', desc:'Eksplorasi mendalam tentang Sejarah Islam di Nusantara.', cover:'cover-5', status:'aktif'},
+  {id:18, title:'Ekonomi Politik Internasional dalam Hubungan Internasional', author:'Hasna Wijayanti, S.IP., M.A', cat:'Ekonomi', type:'Makalah', url:'https://fliphtml5.com/onblf/xeot/Ekonomi_Politik_Internasional_dalam_Hubungan_Internasional/', desc:'Analisis perkembangan ekonomi digital di Indonesia dan dampaknya terhadap pertumbuhan nasional.', cover:'cover-6', status:'aktif'},
+  {id:19, title:'Sistem Ekonomi Feudalisme Di China', author:'Cikgu Dayang Khursiah', cat:'Ekonomi', type:'Makalah', url:'https://fliphtml5.com/xzylz/rcab/Sejarah_Dunia_Tema_3_-_Sistem_Ekonomi_Feudalisme_Di_China/', desc:'Analisis perkembangan ekonomi digital di Indonesia dan dampaknya terhadap pertumbuhan nasional.', cover:'cover-6', status:'aktif'},
+  {id:20, title:'Sistem Ekonomi Digital di Indonesia', author:'Dr. DANRIVANTO B.', cat:'Ekonomi', type:'Makalah', url:'https://fliphtml5.com/iiprk/kmkx/Hukum_EKonomi_Digital_di_Indonesia_by_Dr._DANRIVANTO_B_%28z-lib.org%29/', desc:'Analisis perkembangan ekonomi digital di Indonesia dan dampaknya terhadap pertumbuhan nasional.', cover:'cover-6', status:'aktif'},
+  {id:21, title:'Internet of Things dalam Ekonomi dan Bisnis', author:'Dr.Agus Wibowo', cat:'Ekonomi', type:'Makalah', url:'https://fliphtml5.com/uookw/wxli/Internet_Of_Things_dalam_ekonomi_dan_bisnis/', desc:'Analisis perkembangan ekonomi digital di Indonesia dan dampaknya terhadap pertumbuhan nasional.', cover:'cover-6', status:'aktif'},
+  {id:22, title:'CAKRAWALA', author:'Ganesha ITB', cat:'Ekonomi', type:'Makalah', url:'https://fliphtml5.com/ldzls/MAJALAH-VOL-3-Online-Ver/MAJALAH_CAKRAWALA_VOL_3/', desc:'Analisis perkembangan ekonomi digital di Indonesia dan dampaknya terhadap pertumbuhan nasional.', cover:'cover-6', status:'aktif'},
 ];
 
 
-let nextId = 17;
+const STORAGE_KEY = 'perpusDigitalBooks';
+
+function loadBooks() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length) {
+        books = parsed;
+        nextId = Math.max(...books.map(b => b.id)) + 1;
+        return;
+      }
+    }
+  } catch (e) {
+    console.warn('Could not load books from storage', e);
+  }
+}
+
+function saveBooks() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(books));
+    // Backup ke IndexedDB juga untuk extra safety
+    saveToIndexedDB();
+  } catch (e) {
+    console.warn('Could not save books to storage', e);
+  }
+}
+
+function saveToIndexedDB() {
+  try {
+    const req = indexedDB.open('PerpusDigital', 1);
+    req.onsuccess = (e) => {
+      const db = e.target.result;
+      const tx = db.transaction(['books'], 'readwrite');
+      const store = tx.objectStore('books');
+      store.clear();
+      books.forEach(b => store.add(b));
+    };
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('books')) {
+        db.createObjectStore('books', {keyPath: 'id'});
+      }
+    };
+  } catch (e) {
+    console.warn('Could not save to IndexedDB', e);
+  }
+}
+
+function exportData() {
+  try {
+    const data = JSON.stringify(books, null, 2);
+    const blob = new Blob([data], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'perpus-backup-' + new Date().toISOString().split('T')[0] + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showNotif('Backup data berhasil diunduh', 'success');
+  } catch (e) {
+    showNotif('Gagal membuat backup: ' + e.message, 'error');
+  }
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!Array.isArray(imported)) throw new Error('Format file tidak valid');
+      if (imported.length === 0) throw new Error('File backup kosong');
+      
+      const merged = [...books, ...imported];
+      const unique = [...new Map(merged.map(b => [b.id, b])).values()];
+      books = unique;
+      nextId = Math.max(...books.map(b => b.id)) + 1;
+      saveBooks();
+      renderBooks();
+      renderAdminTable();
+      updateStats();
+      updatePublicStats();
+      renderRecentTable();
+      showNotif('Data berhasil direstore (' + imported.length + ' items)', 'success');
+    } catch (err) {
+      showNotif('Gagal restore data: ' + err.message, 'error');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+let nextId = 22;
 let selectedCover = 'cover-1';
+let selectedCoverImg = '';
 let activeFilter = 'semua';
+let editingBookId = null;
+
+loadBooks();
 
 // === FUNGSI OTOMATIS STATISTIK ===
 function getActiveBooksCount() {
@@ -1337,6 +1535,16 @@ function getCategories() {
   return cats;
 }
 
+function getCoverHtml(book, iconOnly = false) {
+  if (book.coverImg) {
+    return `<img src="${book.coverImg}" alt="${book.title} cover">`;
+  }
+  if (iconOnly) {
+    return `<span style="font-size:42px">${COVERS[book.cover].icon}</span>`;
+  }
+  return '';
+}
+
 function renderBooks() {
   const q = (document.getElementById('search-input')||{value:''}).value.toLowerCase();
   const filtered = books.filter(b => {
@@ -1353,8 +1561,8 @@ function renderBooks() {
     '<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--muted)"><i class="ti ti-books" style="font-size:48px;display:block;margin-bottom:12px"></i>Tidak ada koleksi ditemukan</div>' :
     filtered.map(b => `
       <div class="book-card" onclick="openReader(${b.id})">
-        <div class="book-cover ${COVERS[b.cover].cls}">
-          <span style="font-size:42px">${COVERS[b.cover].icon}</span>
+        <div class="book-cover ${b.coverImg ? '' : COVERS[b.cover].cls}">
+          ${b.coverImg ? `<img src="${b.coverImg}" alt="${b.title} cover">` : `<span style="font-size:42px">${COVERS[b.cover].icon}</span>`}
           <span class="book-type-badge">${b.type}</span>
         </div>
         <div class="book-info">
@@ -1402,9 +1610,15 @@ function openReader(id) {
   document.getElementById('rm-link').textContent = b.url;
   document.getElementById('rm-link').href = b.url;
   document.getElementById('rm-open').href = b.url;
-  const c = COVERS[b.cover];
-  document.getElementById('rm-cover').className = 'reader-cover ' + c.cls;
-  document.getElementById('rm-cover').innerHTML = `<span style="font-size:36px">${c.icon}</span>`;
+  const rmCover = document.getElementById('rm-cover');
+  if (b.coverImg) {
+    rmCover.className = 'reader-cover';
+    rmCover.innerHTML = `<img src="${b.coverImg}" alt="${b.title} cover">`;
+  } else {
+    const c = COVERS[b.cover];
+    rmCover.className = 'reader-cover ' + c.cls;
+    rmCover.innerHTML = `<span style="font-size:36px">${c.icon}</span>`;
+  }
   document.getElementById('reader-overlay').classList.add('open');
 }
 
@@ -1423,7 +1637,7 @@ function renderAdminTable() {
     <tr>
       <td>
         <div class="td-book">
-          <div class="mini-cover ${COVERS[b.cover].cls}" style="font-size:18px">${COVERS[b.cover].icon}</div>
+          <div class="mini-cover ${b.coverImg ? '' : COVERS[b.cover].cls}" style="font-size:18px">${b.coverImg ? `<img src="${b.coverImg}" alt="${b.title} cover">` : COVERS[b.cover].icon}</div>
           <div>
             <div class="td-title">${b.title}</div>
             <div class="td-author">${b.author}</div>
@@ -1485,14 +1699,47 @@ function previewUrl() {
   document.getElementById('url-preview').textContent = v || 'https://... (preview link)';
 }
 
+function previewCover(event) {
+  const file = event.target.files[0];
+  const preview = document.getElementById('cover-preview');
+  if (!file) {
+    selectedCoverImg = '';
+    preview.textContent = 'Belum ada cover';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    selectedCoverImg = reader.result;
+    preview.innerHTML = `<img src="${reader.result}" alt="Cover preview">`;
+  };
+  reader.readAsDataURL(file);
+}
+
 function resetForm() {
   ['f-title','f-author','f-url','f-desc'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('f-cat').value = '';
   document.getElementById('f-type').value = 'Buku';
+  document.getElementById('f-cover').value = '';
   document.getElementById('url-preview').textContent = 'https://... (preview link)';
+  document.getElementById('cover-preview').textContent = 'Belum ada cover';
+  selectedCoverImg = '';
+  editingBookId = null;
   document.querySelectorAll('.cover-opt').forEach(x => x.classList.remove('selected'));
   document.querySelector('.cover-opt').classList.add('selected');
   selectedCover = 'cover-1';
+  updateSubmitButton();
+}
+
+function updateSubmitButton() {
+  const btn = document.getElementById('submit-btn');
+  if (!btn) return;
+  if (editingBookId !== null) {
+    btn.innerHTML = '<i class="ti ti-edit" aria-hidden="true"></i> Perbarui Buku';
+    btn.style.background = '#2e7ec4';
+  } else {
+    btn.innerHTML = '<i class="ti ti-upload" aria-hidden="true"></i> Upload Sekarang';
+    btn.style.background = '';
+  }
 }
 
 function submitUpload() {
@@ -1513,25 +1760,45 @@ function submitUpload() {
     return;
   }
 
-  books.push({
-    id: nextId++,
-    title, author, cat, type, url, desc,
-    cover: selectedCover,
-    status: 'aktif'
-  });
-
-  showNotif('"' + title + '" berhasil diupload!', 'success');
+  if (editingBookId !== null) {
+    // Mode edit: update buku yang sudah ada
+    const bookIndex = books.findIndex(b => b.id === editingBookId);
+    if (bookIndex !== -1) {
+      books[bookIndex] = {
+        ...books[bookIndex],
+        title, author, cat, type, url, desc,
+        cover: selectedCover,
+        coverImg: selectedCoverImg || books[bookIndex].coverImg
+      };
+      saveBooks();
+      showNotif('"' + title + '" berhasil diperbarui!', 'success');
+    }
+  } else {
+    // Mode baru: tambah buku baru
+    books.push({
+      id: nextId++,
+      title, author, cat, type, url, desc,
+      cover: selectedCover,
+      coverImg: selectedCoverImg || undefined,
+      status: 'aktif'
+    });
+    saveBooks();
+    showNotif('"' + title + '" berhasil diupload!', 'success');
+  }
+  
   resetForm();
   renderRecentTable();
   renderAdminTable();
   updateStats();
   updatePublicStats();
+  renderBooks();
 }
 
 function deleteBook(id) {
   const b = books.find(x=>x.id===id);
   if(!b) return;
   books = books.filter(x => x.id !== id);
+  saveBooks();
   renderAdminTable();
   renderRecentTable();
   updateStats();
@@ -1543,6 +1810,7 @@ function deleteBook(id) {
 function editBook(id) {
   const b = books.find(x=>x.id===id);
   if(!b) return;
+  editingBookId = id;
   document.getElementById('f-title').value = b.title;
   document.getElementById('f-author').value = b.author;
   document.getElementById('f-cat').value = b.cat;
@@ -1551,13 +1819,20 @@ function editBook(id) {
   document.getElementById('f-desc').value = b.desc;
   document.getElementById('url-preview').textContent = b.url;
   selectedCover = b.cover;
+  selectedCoverImg = b.coverImg || '';
+  const coverPreview = document.getElementById('cover-preview');
+  if (b.coverImg) {
+    coverPreview.innerHTML = `<img src="${b.coverImg}" alt="${b.title} cover">`;
+  } else {
+    coverPreview.textContent = 'Belum ada cover';
+  }
   document.querySelectorAll('.cover-opt').forEach(x => x.classList.remove('selected'));
   const opt = document.querySelector(`.cover-opt[data-cover="${b.cover}"]`);
   if(opt) opt.classList.add('selected');
 
-  books = books.filter(x => x.id !== id);
   showAdminSection('upload', document.querySelectorAll('.sidebar-item')[1]);
-  showNotif('Edit mode: ubah data lalu klik Upload', 'success');
+  updateSubmitButton();
+  showNotif('Edit mode: ubah data atau cover lalu klik Perbarui Buku', 'success');
 }
 
 function renderAnalytics() {
